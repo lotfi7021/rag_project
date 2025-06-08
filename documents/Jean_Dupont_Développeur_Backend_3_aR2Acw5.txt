@@ -1,0 +1,41 @@
+Jean Dupont, Développeur Backend, 3500
+Marie Curie, Analyste Données, 4200
+Ahmed Benali, Responsable IT, 5100
+Sophie Martin, RH, 3100
+Lucas Dubois, Développeur Frontend, 3700
+Nadia El Amrani, Chef de projet, 4800
+Mohamed Yassine, Technicien support, 2800
+Julie Robert, Comptable, 3300
+Karim Boulahdour, Architecte logiciel, 6200
+Leila Mansouri, Analyste Données, 4300
+Paul Durand, Développeur Backend, 3600
+Fatma Zohra, Responsable RH, 4000
+Ali Gharbi, Technicien réseau, 2950
+Emma Leroy, Développeur Frontend, 3900
+Youssef Hariri, Chef de projet, 5000
+Chloé Masson, Comptable, 3200
+Tarek Jelassi, DevOps Engineer, 4700
+Laura Bernard, Analyste Données, 4400
+Amine Mabrouk, Développeur Backend, 3550
+Sarah Ben Said, RH, 3100
+Omar Lamine, Architecte Cloud, 6000
+Isabelle Petit, Assistante RH, 2800
+Rania Bouzid, Data Scientist, 5500
+Walid Kacem, Développeur Frontend, 3750
+Nour El Houda, Chef de projet, 4900
+Mickael Fontaine, Comptable, 3300
+Samira Ben Youssef, Responsable IT, 5200
+Thomas Garnier, Analyste Systèmes, 4100
+Mouna Laabidi, Développeur Backend, 3450
+Yassine Slimani, Technicien support, 2850
+Claire Denis, RH, 3050
+Hichem Tlili, DevOps Engineer, 4600
+Inès Ferchichi, Analyste Données, 4250
+Julien Moreau, Développeur Frontend, 3800
+Ameni Ayari, Chef de projet, 4700
+Bilal Hamdi, Technicien réseau, 2900
+Sabrina Daoud, Comptable, 3400
+Hamza Ben Aissa, Responsable IT, 5300
+Lina Khaldi, Analyste Données, 4350
+Rami Jelassi, Développeur Backend, 3650
+Myriam Belkacem, RH, 3150

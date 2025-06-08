@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documents List</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+    
+    :root {
+      --primary: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #d946ef 100%);
+      --primary-solid: #6366f1;
+      --secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+      --accent: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+      --success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      --danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      --warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      
+      --bg-primary: #0f0f23;
+      --bg-secondary: #1a1a2e;
+      --bg-tertiary: #16213e;
+      --bg-card: rgba(26, 26, 46, 0.8);
+      --bg-glass: rgba(255, 255, 255, 0.03);
+      
+      --text-primary: #ffffff;
+      --text-secondary: #a1a1aa;
+      --text-muted: #71717a;
+      
+      --border-primary: rgba(255, 255, 255, 0.1);
+      --border-secondary: rgba(255, 255, 255, 0.05);
+      
+      --shadow-sm: 0 4px 16px rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 8px 32px rgba(0, 0, 0, 0.3);
+      --shadow-lg: 0 16px 64px rgba(0, 0, 0, 0.4);
+      --shadow-glow: 0 0 40px rgba(99, 102, 241, 0.3);
+      
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      
+      --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 40% 60%, rgba(217, 70, 239, 0.1) 0%, transparent 50%);
+      animation: float 20s ease-in-out infinite;
+      pointer-events: none;
+      z-index: -2;
+    }
+    
+    body::after {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(45deg, transparent 48%, rgba(99, 102, 241, 0.03) 49%, rgba(99, 102, 241, 0.03) 51%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, rgba(139, 92, 246, 0.03) 49%, rgba(139, 92, 246, 0.03) 51%, transparent 52%);
+      background-size: 30px 30px;
+      animation: grid-move 40s linear infinite;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-20px) rotate(1deg); }
+      66% { transform: translateY(10px) rotate(-1deg); }
+    }
+    
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(30px, 30px); }
+    }
+    
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+    
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 3rem;
+      padding: 2rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0.05;
+      pointer-events: none;
+    }
+    
+    h2 {
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-weight: 800;
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      letter-spacing: -0.02em;
+    }
+    
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: -0.5rem;
+      left: 0;
+      width: 4rem;
+      height: 0.25rem;
+      background: var(--primary);
+      border-radius: 2px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(99, 102, 241, 0.5); }
+      to { box-shadow: 0 0 20px rgba(99, 102, 241, 0.8), 0 0 30px rgba(139, 92, 246, 0.3); }
+    }
+    
+    /* Add Document Button */
+    #addDocBtn {
+      background: var(--primary);
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: var(--transition-bounce);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    #addDocBtn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.6s ease;
+    }
+    
+    #addDocBtn:hover::before {
+      left: 100%;
+    }
+    
+    #addDocBtn:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: var(--shadow-glow), var(--shadow-md);
+    }
+    
+    #addDocBtn:active {
+      transform: translateY(0) scale(0.98);
+    }
+    
+    #addDocBtn::after {
+      content: "+";
+      font-size: 1.5rem;
+      font-weight: 300;
+      transition: var(--transition-smooth);
+    }
+    
+    #addDocBtn:hover::after {
+      transform: rotate(180deg);
+    }
+    
+    /* Documents Grid */
+    #documentsContainer {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+      gap: 2rem;
+      animation: fadeInUp 0.6s ease-out;
+    }
+    
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Document Cards */
+    .document-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-sm);
+      padding: 2rem;
+      transition: var(--transition-bounce);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+    
+    .document-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--primary);
+    }
+    
+    .document-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--primary);
+      opacity: 0;
+      transition: var(--transition-smooth);
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .document-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(99, 102, 241, 0.3);
+    }
+    
+    .document-card:hover::after {
+      opacity: 0.05;
+    }
+    
+    .document-card h3 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      transition: var(--transition-smooth);
+    }
+    
+    .document-card:hover h3 {
+      transform: translateX(4px);
+    }
+    
+    /* Document Meta */
+    .document-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.875rem;
+      font-weight: 500;
+      padding: 0.75rem 1rem;
+      background: var(--bg-glass);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-secondary);
+    }
+    
+    .document-meta::before {
+      content: "📅";
+      font-size: 1rem;
+    }
+    
+    /* Document Content */
+    .document-content {
+      flex: 1;
+      padding: 1.5rem;
+      background: var(--bg-glass);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-secondary);
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      min-height: 8rem;
+      position: relative;
+      transition: var(--transition-smooth);
+      overflow: hidden;
+    }
+    
+    .document-content::before {
+      content: '';
+      position: absolute;
+      top: -1px;
+      left: -1px;
+      right: -1px;
+      bottom: -1px;
+      background: var(--primary);
+      border-radius: var(--radius-md);
+      opacity: 0;
+      transition: var(--transition-smooth);
+      z-index: -1;
+    }
+    
+    .document-content:hover {
+      transform: scale(1.01);
+      color: var(--text-primary);
+    }
+    
+    .document-content:hover::before {
+      opacity: 0.1;
+    }
+    
+    /* Download Link */
+    .document-download {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--success);
+      color: white;
+      text-decoration: none;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 600;
+      transition: var(--transition-bounce);
+      align-self: flex-start;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .document-download::before {
+      content: "⬇️";
+      font-size: 1.1rem;
+      transition: var(--transition-smooth);
+    }
+    
+    .document-download:hover::before {
+      transform: translateY(2px);
+    }
+    
+    .document-download:hover {
+      transform: translateY(-2px) scale(1.05);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+    }
+    
+    /* Delete Button */
+    .delete-btn {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: var(--danger);
+      color: white;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-bounce);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .delete-btn::before {
+      content: "🗑️";
+      font-size: 0.875rem;
+    }
+    
+    .delete-btn:hover {
+      transform: scale(1.1) rotate(-3deg);
+      box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+    }
+    
+    .delete-btn:active {
+      transform: scale(0.95) rotate(-1deg);
+    }
+    
+    /* Loading & Empty States */
+    .loading, .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--border-primary);
+      box-shadow: var(--shadow-md);
+      position: relative;
+    }
+    
+    .loading {
+      color: var(--primary-solid);
+      font-size: 1.25rem;
+      font-weight: 600;
+    }
+    
+    .loading::after {
+      content: '';
+      position: absolute;
+      width: 3rem;
+      height: 3rem;
+      border: 3px solid rgba(99, 102, 241, 0.2);
+      border-top: 3px solid var(--primary-solid);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 1.5rem auto 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    @keyframes spin {
+      0% { transform: translateX(-50%) rotate(0deg); }
+      100% { transform: translateX(-50%) rotate(360deg); }
+    }
+    
+    .empty-state {
+      color: var(--text-secondary);
+      font-size: 1.125rem;
+      font-weight: 500;
+    }
+    
+    .empty-state::before {
+      content: "📄";
+      display: block;
+      font-size: 4rem;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    /* Card Entrance Animation */
+    .document-card {
+      animation: slideInUp 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    
+    .document-card:nth-child(1) { animation-delay: 0.1s; }
+    .document-card:nth-child(2) { animation-delay: 0.15s; }
+    .document-card:nth-child(3) { animation-delay: 0.2s; }
+    .document-card:nth-child(4) { animation-delay: 0.25s; }
+    .document-card:nth-child(n+5) { animation-delay: 0.3s; }
+    
+    @keyframes slideInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+      #documentsContainer {
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 1.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        padding: 1rem;
+      }
+      
+      header {
+        flex-direction: column;
+        gap: 1.5rem;
+        text-align: center;
+        padding: 1.5rem;
+      }
+      
+      #documentsContainer {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+      
+      .document-card {
+        padding: 1.5rem;
+      }
+      
+      #addDocBtn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .document-card {
+        padding: 1rem;
+      }
+      
+      .document-content {
+        padding: 1rem;
+        font-size: 0.875rem;
+      }
+      
+      h2 {
+        font-size: 1.75rem;
+      }
+    }
+    
+    /* Hover Effects for Desktop */
+    @media (hover: hover) {
+      .document-card:hover .document-content {
+        transform: scale(1.02);
+      }
+      
+      .document-card:hover .document-download {
+        transform: translateX(4px);
+      }
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: var(--bg-secondary);
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #8b5cf6, #d946ef);
+    }
+    
+    /* Focus States for Accessibility */
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--primary-solid);
+      outline-offset: 2px;
+    }
+    
+    /* Selection Styling */
+    ::selection {
+      background: rgba(99, 102, 241, 0.3);
+      color: var(--text-primary);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h2>My Documents</h2>
+      <button id="addDocBtn">Ajouter Document</button>
+    </header>
+    
+    <div id="documentsContainer">
+      <div class="loading">Loading documents...</div>
+    </div>
+  </div>
+
+  <script>
+    // Store documents in memory instead of localStorage
+    let documentsData = [];
+    
+    document.getElementById("addDocBtn").addEventListener("click", () => {
+      window.location.href = "/add_document/";
+    });
+
+    async function fetchDocuments() {
+      // Simulate getting access token (replace with your actual implementation)
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+        alert("Please login first.");
+        window.location.href = "/login";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/documents/", {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            alert("Session expired or unauthorized. Please login again.");
+            window.location.href = "/login";
+          } else {
+            alert("Failed to fetch documents.");
+          }
+          return;
+        }
+
+        const docs = await response.json();
+        documentsData = docs; // Store in memory
+        const container = document.getElementById("documentsContainer");
+        container.innerHTML = "";
+
+        if (!docs.length) {
+          container.innerHTML = `<div class="empty-state">No documents found. Click "Ajouter Document" to add one.</div>`;
+          return;
+        }
+
+        docs.forEach((doc, index) => {
+          console.log("Document content:", doc.content);
+
+          let fileUrl = "";
+          let fileName = "Download file";
+
+          if (typeof doc.file === "string") {
+            fileUrl = doc.file;
+            fileName = doc.file.split('/').pop();
+          } else if (doc.file && typeof doc.file === "object") {
+            fileUrl = doc.file.url || "";
+            fileName = doc.file.name || "Download file";
+          }
+
+          const div = document.createElement("div");
+          div.className = "document-card";
+          div.style.animationDelay = `${index * 0.05}s`;
+          div.innerHTML = `
+            <h3>${doc.title}</h3>
+            <div class="document-meta">
+              <span>Uploaded: ${new Date(doc.uploaded_at).toLocaleString()}</span>
+            </div>
+            <div class="document-content">
+              ${doc.content ? doc.content : '<em>No content available</em>'}
+            </div>
+            <a href="http://127.0.0.1:8000${fileUrl}" download="${fileName}" class="document-download">
+              ${fileName}
+            </a>
+            <button class="delete-btn">Delete</button>
+          `;
+
+          // Delete functionality
+          const deleteBtn = div.querySelector(".delete-btn");
+          deleteBtn.addEventListener("click", async () => {
+            if (!confirm(`Are you sure you want to delete the document "${doc.title}"?`)) return;
+
+            try {
+              const delResponse = await fetch(`http://127.0.0.1:8000/api/documents/${doc.id}/`, {
+                method: "DELETE",
+                headers: {
+                  "Authorization": `Bearer ${accessToken}`
+                }
+              });
+
+              if (delResponse.ok) {
+                // Remove from memory
+                documentsData = documentsData.filter(d => d.id !== doc.id);
+                
+                // Smooth deletion animation
+                div.style.transform = 'scale(0.8) rotateX(90deg)';
+                div.style.opacity = '0';
+                div.style.height = '0';
+                div.style.margin = '0';
+                div.style.padding = '0';
+                
+                setTimeout(() => {
+                  div.remove();
+                  if (container.children.length === 0) {
+                    container.innerHTML = `<div class="empty-state">No documents found. Click "Ajouter Document" to add one.</div>`;
+                  }
+                }, 400);
+              } else {
+                alert("Failed to delete document.");
+              }
+            } catch (error) {
+              alert("Error deleting document: " + error.message);
+            }
+          });
+
+          container.appendChild(div);
+        });
+
+      } catch (error) {
+        document.getElementById("documentsContainer").innerHTML = `
+          <div class="empty-state">Error loading documents: ${error.message}</div>
+        `;
+      }
+    }
+
+    // Helper function to get access token (replace with your actual implementation)
+    function getAccessToken() {
+      // For demo purposes, return a mock token
+      // In your actual implementation, replace this with your token retrieval logic
+      return "mock-access-token";
+    }
+
+    // Initialize
+    fetchDocuments();
+
+    // Add some interactive polish
+    document.addEventListener('mousemove', (e) => {
+      const cards = document.querySelectorAll('.document-card');
+      cards.forEach(card => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        
+        if (x >= 0 && x <= rect.width && y >= 0 && y <= rect.height) {
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 20;
+          const rotateY = (centerX - x) / 20;
+          
+          card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-8px) scale(1.02)`;
+        }
+      });
+    });
+
+    document.addEventListener('mouseleave', () => {
+      const cards = document.querySelectorAll('.document-card');
+      cards.forEach(card => {
+        card.style.transform = '';
+      });
+    });
+  </script>
+</body>
+</html>

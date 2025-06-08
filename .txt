@@ -1,0 +1,135 @@
+pip install graphene-django
+pip install langchain
+pip install django langchain openai langchain-community langchainhub
+pip install PyPDF2
+pip install python-docx
+
+.\.venv\Scripts\activate
+python -m celery -A rag_project worker --loglevel=info
+
+ python manage.py build_faiss_index
+python manage.py shell
+from rag_app.tasks import retrieve_and_respond_task
+retrieve_and_respond_task.delay("شنوّة الفايدة من التسجيل في الجيم؟")
+
+
+
+pip install celery redis faiss-cpu sentence-transformers //celery
+PS C:\Users\lotfi\OneDrive\Bureau\sesam2\python\django_projects\rag_project> pip install celery redis
+PS C:\Users\lotfi\OneDrive\Bureau\sesam2\python\django_projects\rag_project> pip install faiss-cpu   
+ollama run mistral
+
+
+http://localhost:8000/api/create-session/
+http://localhost:8000/api/documents/
+http://localhost:8000/graphql/#query=
+http://localhost:8000/api/chat/1/
+http://localhost:8000/api/generate-embeddings/1/
+
+
+
+
+http://127.0.0.1:8000/chat-sessions/
+http://127.0.0.1:8000/chat
+
+
+
+
+##################################
+POST /api/create-session/
+Content-Type: application/json
+
+{
+  "document": 1
+}
+{
+    "session_id": "547d3f49-bdcf-41fa-8961-723e97249702"
+    
+}
+#################################
+
+
+
+
+##########################33
+http://127.0.0.1:8000/api/chat/547d3f49-bdcf-41fa-8961-723e97249702/
+
+
+{
+  "question": "ما معنى RAG؟"
+}
+
+{
+    "answer": "Réponse générée pour: ما معنى RAG؟"
+}
+############################
+
+
+
+
+
+
+
+
+
+
+
+from rag_app.tasks import analyze_employees_task
+
+text = """
+Jean Dupont, Développeur Backend, 3500
+Marie Curie, Analyste Données, 4200
+Ahmed Benali, Responsable IT, 5100
+Sophie Martin, RH, 3100
+Lucas Dubois, Développeur Frontend, 3700
+Nadia El Amrani, Chef de projet, 4800
+Mohamed Yassine, Technicien support, 2800
+Julie Robert, Comptable, 3300
+"""
+
+result = analyze_employees_task.delay(text)
+print("Task sent, waiting for result...")
+
+# انتظر نتيجة المهمة (يمكن تأخير حسب تعقيد المهمة)
+print(result.get(timeout=10))
+
+
+
+
+كم عدد الموظفين المذكورين؟
+→ Combien d'employés sont mentionnés ?
+
+ما هو متوسط الرواتب؟
+→ Quelle est la moyenne des salaires ?
+
+من هو الموظف الذي يحصل على أعلى راتب؟
+→ Quel est l'employé avec le salaire le plus élevé ?
+
+من هو الموظف الذي يحصل على أدنى راتب؟
+→ Quel est l'employé avec le salaire le plus bas ?
+
+ما عدد المطورين (Développeurs)؟
+→ Combien y a-t-il de développeurs ?
+
+ما الوظائف المختلفة الموجودة في القائمة؟
+→ Quelles sont les différentes fonctions présentes dans la liste ?
+
+ما مجموع الرواتب؟
+→ Quel est le total des salaires ?
+
+
+→ Y a-t-il un manager dans la liste ?
+
+هل يعمل أحد في قسم التسويق؟
+→ Quelqu'un travaille-t-il dans le département marketing ?
+
+🧠 Questions Intelligentes (Requêtant une analyse)
+→ Quels sont les employés qui gagnent plus de 8000 ?
+
+→ Le salaire le plus élevé est-il le double du plus bas ?
+
+→ Y a-t-il plus d'un développeur ?
+
+ما النسبة المئوية للمطورين من إجمالي الموظفين؟
+→ Quel est le pourcentage de développeurs parmi l'effectif total ?
+

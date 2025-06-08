@@ -1,0 +1,16 @@
+Jean Dupont, Développeur Backend, 3500
+Marie Curie, Analyste Données, 4200
+Ahmed Benali, Responsable IT, 5100
+Sophie Martin, RH, 3100
+Lucas Dubois, Développeur Frontend, 3700
+Nadia El Amrani, Chef de projet, 4800
+Mohamed Yassine, Technicien suppo
+Emma Leroy, Développeur Frontend, 3900
+Youssef Hariri, Chef de projet, 5000
+Yassine Slimani, Technicien support, 2850
+Hichem Tlili, DevOps Engineer, 4600
+Inès Ferchichi, Analyste Données, 4250
+Julien Moreau, Développeur Frontend, 3800
+Ameni Ayari, Chef de projet, 4700
+Bilal Hamdi, Technicien réseau, 2900
+Sabrina Daoud, Comptable, 3400

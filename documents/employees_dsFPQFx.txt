@@ -1,0 +1,8 @@
+Jean Dupont, Développeur Backend, 3500
+Marie Curie, Analyste Données, 4200
+Ahmed Benali, Responsable IT, 5100
+Sophie Martin, RH, 3100
+Lucas Dubois, Développeur Frontend, 3200
+Nadia El Amrani, Chef de projet, 4800
+Mohamed Yassine, Technicien support, 2800
+Julie Robert, Comptable, 3300

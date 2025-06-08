@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Add New Document</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    :root {
+      --primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      --primary-dark: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+      --secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      --accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      --dark: #0f0f23;
+      --dark-light: #1a1a2e;
+      --text-primary: #ffffff;
+      --text-secondary: rgba(255, 255, 255, 0.8);
+      --text-muted: rgba(255, 255, 255, 0.6);
+      --glass-bg: rgba(255, 255, 255, 0.05);
+      --glass-border: rgba(255, 255, 255, 0.1);
+      --shadow-dark: 0 20px 40px rgba(0, 0, 0, 0.3);
+      --shadow-glow: 0 0 40px rgba(102, 126, 234, 0.3);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--dark);
+      background-image: 
+        radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.3) 0%, transparent 50%),
+        radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.2) 0%, transparent 50%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      overflow-x: hidden;
+    }
+    
+    .background-shapes {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .shape {
+      position: absolute;
+      border-radius: 50%;
+      background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+      animation: float 6s ease-in-out infinite;
+    }
+    
+    .shape:nth-child(1) {
+      width: 300px;
+      height: 300px;
+      top: -150px;
+      right: -150px;
+      animation-delay: 0s;
+    }
+    
+    .shape:nth-child(2) {
+      width: 200px;
+      height: 200px;
+      bottom: -100px;
+      left: -100px;
+      animation-delay: 2s;
+    }
+    
+    .shape:nth-child(3) {
+      width: 150px;
+      height: 150px;
+      top: 50%;
+      left: -75px;
+      animation-delay: 4s;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+    
+    .form-container {
+      background: var(--glass-bg);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+      padding: 48px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: var(--shadow-dark), var(--shadow-glow);
+      position: relative;
+      z-index: 1;
+      overflow: hidden;
+    }
+    
+    .form-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: var(--accent);
+      opacity: 0.6;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .header h2 {
+      background: var(--primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+    
+    .header p {
+      color: var(--text-muted);
+      font-size: 16px;
+      font-weight: 400;
+    }
+    
+    #addDocForm {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+    
+    .form-group {
+      position: relative;
+    }
+    
+    label {
+      display: block;
+      color: var(--text-primary);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .input-wrapper {
+      position: relative;
+    }
+    
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 16px 20px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-family: inherit;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      backdrop-filter: blur(10px);
+    }
+    
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: rgba(102, 126, 234, 0.5);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 
+        0 0 0 3px rgba(102, 126, 234, 0.1),
+        0 8px 25px rgba(102, 126, 234, 0.15);
+      transform: translateY(-2px);
+    }
+    
+    input[type="text"]::placeholder,
+    textarea::placeholder {
+      color: var(--text-muted);
+    }
+    
+    textarea {
+      min-height: 120px;
+      resize: vertical;
+      font-family: inherit;
+    }
+    
+    .file-upload-area {
+      position: relative;
+      margin-top: 8px;
+    }
+    
+    .file-drop-zone {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+      border: 2px dashed rgba(255, 255, 255, 0.2);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      overflow: hidden;
+    }
+    
+    .file-drop-zone::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+      transition: left 0.6s;
+    }
+    
+    .file-drop-zone:hover::before {
+      left: 100%;
+    }
+    
+    .file-drop-zone:hover {
+      border-color: rgba(102, 126, 234, 0.5);
+      background: rgba(102, 126, 234, 0.05);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+    }
+    
+    .file-icon {
+      width: 48px;
+      height: 48px;
+      margin-bottom: 16px;
+      background: var(--accent);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: white;
+    }
+    
+    .file-text {
+      text-align: center;
+    }
+    
+    .file-text h4 {
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    
+    .file-text p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    #fileNameDisplay {
+      margin-top: 12px;
+      padding: 8px 16px;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-size: 14px;
+      font-weight: 500;
+      display: none;
+    }
+    
+    #fileNameDisplay.show {
+      display: block;
+      animation: slideIn 0.3s ease-out;
+    }
+    
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    input[type="file"] {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      border: 0;
+    }
+    
+    .submit-btn {
+      background: var(--primary);
+      border: none;
+      border-radius: 12px;
+      padding: 16px 32px;
+      color: var(--text-primary);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.6s;
+    }
+    
+    .submit-btn:hover::before {
+      left: 100%;
+    }
+    
+    .submit-btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+    
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+    
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 24px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    
+    .back-link:hover {
+      color: var(--text-primary);
+      transform: translateX(-4px);
+    }
+    
+    .back-link i {
+      font-size: 12px;
+    }
+    
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 32px 24px;
+        margin: 20px;
+      }
+      
+      .header h2 {
+        font-size: 28px;
+      }
+      
+      .file-drop-zone {
+        padding: 32px 16px;
+      }
+    }
+    
+    /* Loading animation */
+    .loading {
+      pointer-events: none;
+      opacity: 0.7;
+    }
+    
+    .loading .submit-btn {
+      background: var(--glass-bg);
+      color: var(--text-muted);
+    }
+    
+    .loading .submit-btn::after {
+      content: '';
+      position: absolute;
+      width: 16px;
+      height: 16px;
+      margin: auto;
+      border: 2px solid transparent;
+      border-top-color: var(--text-muted);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <div class="background-shapes">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <div class="form-container">
+    <div class="header">
+      <h2>Add New Document</h2>
+      <p>Upload and organize your files with ease</p>
+    </div>
+    
+    <form id="addDocForm" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="title">Document Title</label>
+        <div class="input-wrapper">
+          <input type="text" id="title" name="title" placeholder="Enter a descriptive title" required />
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label for="content">Content Description</label>
+        <div class="input-wrapper">
+          <textarea id="content" name="content" placeholder="Describe your document content..." required></textarea>
+        </div>
+      </div>
+      
+      <div class="form-group">
+        <label>File Upload</label>
+        <div class="file-upload-area">
+          <label class="file-drop-zone" for="file">
+            <div class="file-icon">
+              <i class="fas fa-cloud-upload-alt"></i>
+            </div>
+            <div class="file-text">
+              <h4>Choose file or drag & drop</h4>
+              <p>Supports all common file formats</p>
+            </div>
+          </label>
+          <div id="fileNameDisplay"></div>
+          <input type="file" id="file" name="file" required />
+        </div>
+      </div>
+      
+      <button type="submit" class="submit-btn">
+        <span>Upload Document</span>
+      </button>
+    </form>
+    
+    <a href="/documents/" class="back-link">
+      <i class="fas fa-arrow-left"></i>
+      Back to Documents
+    </a>
+  </div>
+
+  <script>
+    // File upload handling with enhanced UX
+    const fileInput = document.getElementById('file');
+    const fileNameDisplay = document.getElementById('fileNameDisplay');
+    const dropZone = document.querySelector('.file-drop-zone');
+    
+    fileInput.addEventListener('change', function(e) {
+      if (this.files.length > 0) {
+        const fileName = this.files[0].name;
+        const fileSize = (this.files[0].size / 1024 / 1024).toFixed(2);
+        fileNameDisplay.innerHTML = `
+          <i class="fas fa-file"></i>
+          <strong>${fileName}</strong> (${fileSize} MB)
+        `;
+        fileNameDisplay.classList.add('show');
+      } else {
+        fileNameDisplay.classList.remove('show');
+      }
+    });
+    
+    // Drag and drop functionality
+    dropZone.addEventListener('dragover', function(e) {
+      e.preventDefault();
+      this.style.borderColor = 'rgba(102, 126, 234, 0.8)';
+      this.style.background = 'rgba(102, 126, 234, 0.1)';
+    });
+    
+    dropZone.addEventListener('dragleave', function(e) {
+      e.preventDefault();
+      this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      this.style.background = 'rgba(255, 255, 255, 0.02)';
+    });
+    
+    dropZone.addEventListener('drop', function(e) {
+      e.preventDefault();
+      this.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+      this.style.background = 'rgba(255, 255, 255, 0.02)';
+      
+      const files = e.dataTransfer.files;
+      if (files.length > 0) {
+        fileInput.files = files;
+        fileInput.dispatchEvent(new Event('change'));
+      }
+    });
+
+    // Form submission with loading state
+    document.getElementById("addDocForm").addEventListener("submit", async function(e) {
+      e.preventDefault();
+      
+      const formContainer = document.querySelector('.form-container');
+      const submitBtn = document.querySelector('.submit-btn');
+      const originalText = submitBtn.innerHTML;
+      
+      // Add loading state
+      formContainer.classList.add('loading');
+      submitBtn.innerHTML = '<span>Uploading...</span>';
+
+      const title = document.getElementById("title").value;
+      const content = document.getElementById("content").value;
+      const file = fileInput.files[0];
+
+      // Note: In Claude.ai artifacts, localStorage is not supported
+      // This would need to be replaced with a different authentication method
+      const accessToken = "your_access_token_here"; // Replace with your auth method
+
+      if (!accessToken) {
+        alert("Please login first.");
+        window.location.href = "/login";
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("content", content);
+      formData.append("file", file);
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/documents/", {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${accessToken}`
+          },
+          body: formData
+        });
+
+        if (response.ok) {
+          // Success animation
+          submitBtn.innerHTML = '<span><i class="fas fa-check"></i> Success!</span>';
+          submitBtn.style.background = 'linear-gradient(135deg, #4bb543 0%, #2d8f3f 100%)';
+          
+          setTimeout(() => {
+            alert("Document added successfully!");
+            window.location.href = "/documents/";
+          }, 1500);
+        } else {
+          const errorData = await response.json();
+          throw new Error(errorData.detail || JSON.stringify(errorData));
+        }
+      } catch (error) {
+        // Error state
+        submitBtn.innerHTML = '<span><i class="fas fa-exclamation-triangle"></i> Error</span>';
+        submitBtn.style.background = 'linear-gradient(135deg, #e63946 0%, #c62d42 100%)';
+        
+        setTimeout(() => {
+          alert("An error occurred: " + error.message);
+          formContainer.classList.remove('loading');
+          submitBtn.innerHTML = originalText;
+          submitBtn.style.background = '';
+        }, 2000);
+      }
+    });
+    
+    // Enhanced input animations
+    const inputs = document.querySelectorAll('input[type="text"], textarea');
+    inputs.forEach(input => {
+      input.addEventListener('focus', function() {
+        this.parentElement.style.transform = 'scale(1.02)';
+      });
+      
+      input.addEventListener('blur', function() {
+        this.parentElement.style.transform = 'scale(1)';
+      });
+    });
+  </script>
+</body>
+</html>

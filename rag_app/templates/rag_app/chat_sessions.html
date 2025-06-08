@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document Manager</title>
+  <style>
+    :root {
+      /* Color Palette */
+      --primary: #4361ee;
+      --primary-light: #4895ef;
+      --primary-dark: #3a0ca3;
+      --secondary: #4cc9f0;
+      --accent: #f72585;
+      --success: #38b000;
+      --warning: #ff9e00;
+      --danger: #d90429;
+      
+      /* Backgrounds */
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-card: #ffffff;
+      --bg-glass: rgba(255, 255, 255, 0.7);
+      
+      /* Text */
+      --text-primary: #212529;
+      --text-secondary: #495057;
+      --text-muted: #6c757d;
+      
+      /* Borders */
+      --border-primary: #dee2e6;
+      --border-secondary: #ced4da;
+      
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+      --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+      
+      /* Radius */
+      --radius-sm: 0.25rem;
+      --radius-md: 0.5rem;
+      --radius-lg: 0.75rem;
+      --radius-xl: 1rem;
+      
+      /* Transitions */
+      --transition-fast: all 0.15s ease;
+      --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Header */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-primary);
+    }
+
+    h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    h1::before {
+      content: "📁";
+      font-size: 1.5rem;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      border: none;
+      outline: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary);
+      color: white;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-icon {
+      width: 2.5rem;
+      height: 2.5rem;
+      padding: 0;
+      border-radius: 50%;
+    }
+
+    /* Documents Grid */
+    .documents-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    /* Document Card */
+    .document-card {
+      background-color: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: var(--transition-smooth);
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .document-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .document-header {
+      padding: 1.25rem;
+      border-bottom: 1px solid var(--border-primary);
+      position: relative;
+    }
+
+    .document-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .document-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem;
+      color: var(--text-muted);
+    }
+
+    .document-actions {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .document-content {
+      flex: 1;
+      padding: 1.25rem;
+      font-size: 0.9375rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 5;
+      -webkit-box-orient: vertical;
+    }
+
+    .document-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid var(--border-primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .document-type {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--primary);
+      background-color: rgba(67, 97, 238, 0.1);
+      padding: 0.25rem 0.5rem;
+      border-radius: var(--radius-sm);
+    }
+
+    /* Empty State */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+      background-color: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .empty-state-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--text-muted);
+    }
+
+    /* Loading State */
+    .loading {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 3rem;
+    }
+
+    .spinner {
+      width: 3rem;
+      height: 3rem;
+      border: 3px solid rgba(67, 97, 238, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 1rem;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 1.5rem;
+      }
+      
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+      }
+      
+      .documents-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Utility Classes */
+    .text-truncate {
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .btn-danger {
+      background-color: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #b00020;
+    }
+
+    .btn-success {
+      background-color: var(--success);
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #2d8000;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Document Manager</h1>
+      <button id="addDocBtn" class="btn btn-primary">
+        <span>Add Document</span>
+      </button>
+    </header>
+    
+    <div id="documentsContainer" class="documents-grid">
+      <div class="loading">
+        <div class="spinner"></div>
+        <p>Loading documents...</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let documentsData = [];
+    
+    document.getElementById("addDocBtn").addEventListener("click", () => {
+      window.location.href = "/add_document/";
+    });
+
+    async function fetchDocuments() {
+      const accessToken = getAccessToken();
+      if (!accessToken) {
+        alert("Please login first.");
+        window.location.href = "/login";
+        return;
+      }
+
+      try {
+        const response = await fetch("http://127.0.0.1:8000/api/documents/", {
+          headers: {
+            "Authorization": `Bearer ${accessToken}`
+          }
+        });
+
+        if (!response.ok) {
+          if (response.status === 401) {
+            alert("Session expired or unauthorized. Please login again.");
+            window.location.href = "/login";
+          } else {
+            alert("Failed to fetch documents.");
+          }
+          return;
+        }
+
+        const docs = await response.json();
+        documentsData = docs;
+        const container = document.getElementById("documentsContainer");
+        container.innerHTML = "";
+
+        if (!docs.length) {
+          container.innerHTML = `
+            <div class="empty-state">
+              <div class="empty-state-icon">📄</div>
+              <h3>No documents found</h3>
+              <p>Click "Add Document" to upload your first file</p>
+            </div>
+          `;
+          return;
+        }
+
+        docs.forEach((doc, index) => {
+          let fileUrl = "";
+          let fileName = "Download";
+          let fileType = "PDF"; // Default type
+
+          if (typeof doc.file === "string") {
+            fileUrl = doc.file;
+            fileName = doc.file.split('/').pop();
+            fileType = fileName.split('.').pop().toUpperCase();
+          } else if (doc.file && typeof doc.file === "object") {
+            fileUrl = doc.file.url || "";
+            fileName = doc.file.name || "Download";
+            fileType = fileName.split('.').pop().toUpperCase();
+          }
+
+          const div = document.createElement("div");
+          div.className = "document-card";
+          div.innerHTML = `
+            <div class="document-header">
+              <h3 class="document-title">${doc.title}</h3>
+              <div class="document-meta">
+                <span>Uploaded: ${new Date(doc.uploaded_at).toLocaleDateString()}</span>
+              </div>
+              <div class="document-actions">
+                <button class="btn btn-icon btn-danger delete-btn" title="Delete document">
+                  <span>🗑️</span>
+                </button>
+              </div>
+            </div>
+            <div class="document-content">
+              ${doc.content ? doc.content : '<em>No content preview available</em>'}
+            </div>
+            <div class="document-footer">
+              <span class="document-type">${fileType}</span>
+              <a href="http://127.0.0.1:8000${fileUrl}" download="${fileName}" class="btn btn-success">
+                Download
+              </a>
+            </div>
+          `;
+
+          const deleteBtn = div.querySelector(".delete-btn");
+          deleteBtn.addEventListener("click", async (e) => {
+            e.stopPropagation();
+            if (!confirm(`Are you sure you want to delete "${doc.title}"?`)) return;
+
+            try {
+              const delResponse = await fetch(`http://127.0.0.1:8000/api/documents/${doc.id}/`, {
+                method: "DELETE",
+                headers: {
+                  "Authorization": `Bearer ${accessToken}`
+                }
+              });
+
+              if (delResponse.ok) {
+                documentsData = documentsData.filter(d => d.id !== doc.id);
+                div.style.transform = 'scale(0.95)';
+                div.style.opacity = '0';
+                setTimeout(() => div.remove(), 300);
+                
+                if (container.children.length === 0) {
+                  container.innerHTML = `
+                    <div class="empty-state">
+                      <div class="empty-state-icon">📄</div>
+                      <h3>No documents found</h3>
+                      <p>Click "Add Document" to upload your first file</p>
+                    </div>
+                  `;
+                }
+              } else {
+                alert("Failed to delete document.");
+              }
+            } catch (error) {
+              alert("Error deleting document: " + error.message);
+            }
+          });
+
+          div.addEventListener("click", () => {
+            // Optional: Add click handler to view document details
+            console.log("View document:", doc.id);
+          });
+
+          container.appendChild(div);
+        });
+
+      } catch (error) {
+        document.getElementById("documentsContainer").innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">⚠️</div>
+            <h3>Error loading documents</h3>
+            <p>${error.message}</p>
+          </div>
+        `;
+      }
+    }
+
+    function getAccessToken() {
+      // Replace with your actual token retrieval logic
+      return "mock-access-token";
+    }
+
+    // Initialize
+    fetchDocuments();
+  </script>
+</body>
+</html>
